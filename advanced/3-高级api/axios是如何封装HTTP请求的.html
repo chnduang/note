@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>axios 是如何封装 HTTP 请求的 | duangdong的note</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <link rel="icon" href="/logo.png">
+    <link rel="manifest" href="/manifest.json">
+    <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?0088ce24040b03f2947322ab31d23414";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+    <script>
+  var _hmt = _hmt || [];
+  _hmt.push(['_requirePlugin', 'UrlChangeTracker', {
+    shouldTrackUrlChange: function (newPath, oldPath) {
+      newPath = newPath.split('#')[0];
+      oldPath = oldPath.split('#')[0];
+      return newPath != oldPath;
+    }}
+  ]);
+  </script>
+    <meta name="description" content="前端相关知识归纳总结">
+    <meta name="keywords" content="qd-blog,node,vuepress,leetcode,algorithm">
+    
+    <link rel="preload" href="/assets/css/0.styles.b4a844ec.css" as="style"><link rel="preload" href="/assets/js/app.fb0fc32d.js" as="script"><link rel="preload" href="/assets/js/2.57da4f88.js" as="script"><link rel="preload" href="/assets/js/1.a76cc220.js" as="script"><link rel="preload" href="/assets/js/34.b1282d64.js" as="script"><link rel="prefetch" href="/assets/js/10.50f73657.js"><link rel="prefetch" href="/assets/js/100.c111390d.js"><link rel="prefetch" href="/assets/js/101.dbe52203.js"><link rel="prefetch" href="/assets/js/102.78347d2e.js"><link rel="prefetch" href="/assets/js/103.23e893d3.js"><link rel="prefetch" href="/assets/js/104.e58326fd.js"><link rel="prefetch" href="/assets/js/105.14f0c0f5.js"><link rel="prefetch" href="/assets/js/106.478b0c59.js"><link rel="prefetch" href="/assets/js/107.173c3379.js"><link rel="prefetch" href="/assets/js/108.58bfefc5.js"><link rel="prefetch" href="/assets/js/109.903ca7c5.js"><link rel="prefetch" href="/assets/js/11.0390ceee.js"><link rel="prefetch" href="/assets/js/110.166934ad.js"><link rel="prefetch" href="/assets/js/111.910e4cb6.js"><link rel="prefetch" href="/assets/js/112.3dbd22c9.js"><link rel="prefetch" href="/assets/js/113.e1981c9d.js"><link rel="prefetch" href="/assets/js/114.c0bd6caf.js"><link rel="prefetch" href="/assets/js/115.49283197.js"><link rel="prefetch" href="/assets/js/116.b0525975.js"><link rel="prefetch" href="/assets/js/117.d729d74f.js"><link rel="prefetch" href="/assets/js/118.798a9e41.js"><link rel="prefetch" href="/assets/js/119.a5633a43.js"><link rel="prefetch" href="/assets/js/12.f88bec36.js"><link rel="prefetch" href="/assets/js/120.18969f25.js"><link rel="prefetch" href="/assets/js/121.f73f5475.js"><link rel="prefetch" href="/assets/js/122.26a28821.js"><link rel="prefetch" href="/assets/js/123.b45a1a99.js"><link rel="prefetch" href="/assets/js/124.3efd6bf2.js"><link rel="prefetch" href="/assets/js/125.b1f6d1d6.js"><link rel="prefetch" href="/assets/js/126.1c8a2f46.js"><link rel="prefetch" href="/assets/js/127.4c3e2699.js"><link rel="prefetch" href="/assets/js/128.c93f13bf.js"><link rel="prefetch" href="/assets/js/129.627beb2b.js"><link rel="prefetch" href="/assets/js/13.963ad03b.js"><link rel="prefetch" href="/assets/js/130.d342ade0.js"><link rel="prefetch" href="/assets/js/131.d6083b89.js"><link rel="prefetch" href="/assets/js/132.ec293d27.js"><link rel="prefetch" href="/assets/js/133.6eaabf3a.js"><link rel="prefetch" href="/assets/js/134.61ee816e.js"><link rel="prefetch" href="/assets/js/135.8c7ff3c3.js"><link rel="prefetch" href="/assets/js/136.2d06929f.js"><link rel="prefetch" href="/assets/js/137.629dd6f4.js"><link rel="prefetch" href="/assets/js/138.a5c0db17.js"><link rel="prefetch" href="/assets/js/139.9231280a.js"><link rel="prefetch" href="/assets/js/14.512f15b9.js"><link rel="prefetch" href="/assets/js/140.639a854b.js"><link rel="prefetch" href="/assets/js/141.dcf9e9cb.js"><link rel="prefetch" href="/assets/js/142.0d39a44f.js"><link rel="prefetch" href="/assets/js/143.cefb9581.js"><link rel="prefetch" href="/assets/js/144.12a08a9e.js"><link rel="prefetch" href="/assets/js/145.901c663f.js"><link rel="prefetch" href="/assets/js/146.0378db58.js"><link rel="prefetch" href="/assets/js/147.3cae2a24.js"><link rel="prefetch" href="/assets/js/148.c200568a.js"><link rel="prefetch" href="/assets/js/149.ce82e7e2.js"><link rel="prefetch" href="/assets/js/15.a674496c.js"><link rel="prefetch" href="/assets/js/150.c408b03e.js"><link rel="prefetch" href="/assets/js/151.2dc78db4.js"><link rel="prefetch" href="/assets/js/152.0a8d0275.js"><link rel="prefetch" href="/assets/js/153.d61ec83d.js"><link rel="prefetch" href="/assets/js/154.ca106d71.js"><link rel="prefetch" href="/assets/js/155.55a892a9.js"><link rel="prefetch" href="/assets/js/156.bacffc9a.js"><link rel="prefetch" href="/assets/js/157.dc344e78.js"><link rel="prefetch" href="/assets/js/158.712de507.js"><link rel="prefetch" href="/assets/js/159.036020b2.js"><link rel="prefetch" href="/assets/js/16.ed7e507f.js"><link rel="prefetch" href="/assets/js/160.503ea381.js"><link rel="prefetch" href="/assets/js/161.d5c5a4cd.js"><link rel="prefetch" href="/assets/js/162.46947e96.js"><link rel="prefetch" href="/assets/js/163.10615d01.js"><link rel="prefetch" href="/assets/js/164.a305edf0.js"><link rel="prefetch" href="/assets/js/165.eeb41ebd.js"><link rel="prefetch" href="/assets/js/166.3c1e443f.js"><link rel="prefetch" href="/assets/js/167.1194e810.js"><link rel="prefetch" href="/assets/js/168.2307230a.js"><link rel="prefetch" href="/assets/js/169.06f1246b.js"><link rel="prefetch" href="/assets/js/17.de667ca5.js"><link rel="prefetch" href="/assets/js/18.b44e84af.js"><link rel="prefetch" href="/assets/js/19.5b5ad6a1.js"><link rel="prefetch" href="/assets/js/20.6800493a.js"><link rel="prefetch" href="/assets/js/21.6589052c.js"><link rel="prefetch" href="/assets/js/22.f648d829.js"><link rel="prefetch" href="/assets/js/23.3f2da4fb.js"><link rel="prefetch" href="/assets/js/24.e3754eaf.js"><link rel="prefetch" href="/assets/js/25.d8bc19dc.js"><link rel="prefetch" href="/assets/js/26.521f1640.js"><link rel="prefetch" href="/assets/js/27.ae19c4df.js"><link rel="prefetch" href="/assets/js/28.aea1fb0d.js"><link rel="prefetch" href="/assets/js/29.36899509.js"><link rel="prefetch" href="/assets/js/3.13e892f5.js"><link rel="prefetch" href="/assets/js/30.d5bf4c69.js"><link rel="prefetch" href="/assets/js/31.bdfa42a3.js"><link rel="prefetch" href="/assets/js/32.3de6a8f6.js"><link rel="prefetch" href="/assets/js/33.78e6b881.js"><link rel="prefetch" href="/assets/js/35.c9156bbb.js"><link rel="prefetch" href="/assets/js/36.9def5722.js"><link rel="prefetch" href="/assets/js/37.5fd28771.js"><link rel="prefetch" href="/assets/js/38.d13fe7d5.js"><link rel="prefetch" href="/assets/js/39.8a6bc399.js"><link rel="prefetch" href="/assets/js/4.5bdb9365.js"><link rel="prefetch" href="/assets/js/40.358fcd77.js"><link rel="prefetch" href="/assets/js/41.582bc977.js"><link rel="prefetch" href="/assets/js/42.ce0af1ae.js"><link rel="prefetch" href="/assets/js/43.5b96ab18.js"><link rel="prefetch" href="/assets/js/44.6c23dc3b.js"><link rel="prefetch" href="/assets/js/45.e5ac3c83.js"><link rel="prefetch" href="/assets/js/46.6d1e09aa.js"><link rel="prefetch" href="/assets/js/47.69714aeb.js"><link rel="prefetch" href="/assets/js/48.e78c0fec.js"><link rel="prefetch" href="/assets/js/49.1f960c0d.js"><link rel="prefetch" href="/assets/js/5.7c68fdb5.js"><link rel="prefetch" href="/assets/js/50.44c38d3f.js"><link rel="prefetch" href="/assets/js/51.8f2f9f49.js"><link rel="prefetch" href="/assets/js/52.1b4eb28a.js"><link rel="prefetch" href="/assets/js/53.246baad3.js"><link rel="prefetch" href="/assets/js/54.68b88ebf.js"><link rel="prefetch" href="/assets/js/55.919d623f.js"><link rel="prefetch" href="/assets/js/56.fad10f78.js"><link rel="prefetch" href="/assets/js/57.5d0e5238.js"><link rel="prefetch" href="/assets/js/58.b7c17b69.js"><link rel="prefetch" href="/assets/js/59.030d1a01.js"><link rel="prefetch" href="/assets/js/6.c8da7ca7.js"><link rel="prefetch" href="/assets/js/60.6b15ef0b.js"><link rel="prefetch" href="/assets/js/61.34c40db9.js"><link rel="prefetch" href="/assets/js/62.7ed71a69.js"><link rel="prefetch" href="/assets/js/63.da95d5b9.js"><link rel="prefetch" href="/assets/js/64.c0f71e54.js"><link rel="prefetch" href="/assets/js/65.18e96b74.js"><link rel="prefetch" href="/assets/js/66.5ce688c5.js"><link rel="prefetch" href="/assets/js/67.cc96eaa6.js"><link rel="prefetch" href="/assets/js/68.d5d27010.js"><link rel="prefetch" href="/assets/js/69.42f9437a.js"><link rel="prefetch" href="/assets/js/7.e4c88d0e.js"><link rel="prefetch" href="/assets/js/70.0d10d3d7.js"><link rel="prefetch" href="/assets/js/71.83192a70.js"><link rel="prefetch" href="/assets/js/72.d7814d13.js"><link rel="prefetch" href="/assets/js/73.4df612f3.js"><link rel="prefetch" href="/assets/js/74.f4eb9a4b.js"><link rel="prefetch" href="/assets/js/75.a6c12930.js"><link rel="prefetch" href="/assets/js/76.d8f47a17.js"><link rel="prefetch" href="/assets/js/77.5b47d69b.js"><link rel="prefetch" href="/assets/js/78.90cd9662.js"><link rel="prefetch" href="/assets/js/79.94c205c0.js"><link rel="prefetch" href="/assets/js/80.5e6670fb.js"><link rel="prefetch" href="/assets/js/81.83c12bca.js"><link rel="prefetch" href="/assets/js/82.4787e527.js"><link rel="prefetch" href="/assets/js/83.8ec3b025.js"><link rel="prefetch" href="/assets/js/84.2f849026.js"><link rel="prefetch" href="/assets/js/85.663733d3.js"><link rel="prefetch" href="/assets/js/86.0aba60a2.js"><link rel="prefetch" href="/assets/js/87.8195ccf9.js"><link rel="prefetch" href="/assets/js/88.07d28a09.js"><link rel="prefetch" href="/assets/js/89.5491e3a3.js"><link rel="prefetch" href="/assets/js/90.d38c8c70.js"><link rel="prefetch" href="/assets/js/91.ecbd4542.js"><link rel="prefetch" href="/assets/js/92.22f3524b.js"><link rel="prefetch" href="/assets/js/93.76259785.js"><link rel="prefetch" href="/assets/js/94.faa07b31.js"><link rel="prefetch" href="/assets/js/95.fd94d21e.js"><link rel="prefetch" href="/assets/js/96.e21415a5.js"><link rel="prefetch" href="/assets/js/97.7594decb.js"><link rel="prefetch" href="/assets/js/98.234c747f.js"><link rel="prefetch" href="/assets/js/99.e75bdecc.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.5143d2e0.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.b4a844ec.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">duangdong的note</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/node/" class="nav-link">
+  Node
+</a></div><div class="nav-item"><a href="/principle/" class="nav-link">
+  JS执行
+</a></div><div class="nav-item"><a href="/design-mode/" class="nav-link">
+  JS设计模式
+</a></div><div class="nav-item"><a href="/advanced/" class="nav-link router-link-active">
+  JS进阶
+</a></div><div class="nav-item"><a href="/advanced-function/" class="nav-link">
+  高阶函数
+</a></div><div class="nav-item"><a href="/typescript/" class="nav-link">
+  TS
+</a></div><div class="nav-item"><a href="/eight-essay/" class="nav-link">
+  八股文
+</a></div><div class="nav-item"><a href="/hand-writing/" class="nav-link">
+  手写实现
+</a></div><div class="nav-item"><a href="/mdn/" class="nav-link">
+  MDN
+</a></div><div class="nav-item"><a href="/tools/" class="nav-link">
+  工具方法
+</a></div><div class="nav-item"><a href="https://link.aduang.cn" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Home
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/node/" class="nav-link">
+  Node
+</a></div><div class="nav-item"><a href="/principle/" class="nav-link">
+  JS执行
+</a></div><div class="nav-item"><a href="/design-mode/" class="nav-link">
+  JS设计模式
+</a></div><div class="nav-item"><a href="/advanced/" class="nav-link router-link-active">
+  JS进阶
+</a></div><div class="nav-item"><a href="/advanced-function/" class="nav-link">
+  高阶函数
+</a></div><div class="nav-item"><a href="/typescript/" class="nav-link">
+  TS
+</a></div><div class="nav-item"><a href="/eight-essay/" class="nav-link">
+  八股文
+</a></div><div class="nav-item"><a href="/hand-writing/" class="nav-link">
+  手写实现
+</a></div><div class="nav-item"><a href="/mdn/" class="nav-link">
+  MDN
+</a></div><div class="nav-item"><a href="/tools/" class="nav-link">
+  工具方法
+</a></div><div class="nav-item"><a href="https://link.aduang.cn" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Home
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/advanced/" aria-current="page" class="sidebar-link">js 进阶</a></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>2-动画</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>3-高级api</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/advanced/3-高级api/JSB 原理与实践.html" class="sidebar-link">JSB 原理与实践</a></li><li><a href="/advanced/3-高级api/axios是如何封装HTTP请求的.html" class="active sidebar-link">axios 是如何封装 HTTP 请求的</a></li><li><a href="/advanced/3-高级api/mutation-observer.html" class="sidebar-link">DOM 变动观察器（Mutation observer）</a></li><li><a href="/advanced/3-高级api/《You-Dont-Know-JS》笔记小计.html" class="sidebar-link">《You-Dont-Know-JS》笔记小计</a></li><li><a href="/advanced/3-高级api/前端鉴权.html" class="sidebar-link">前端鉴权必须了解的5个兄弟：cookie、session、token、jwt、单点登录</a></li><li><a href="/advanced/3-高级api/发布订阅模式.html" class="sidebar-link">JavaScript的发布订阅模式</a></li><li><a href="/advanced/3-高级api/图解JavaScript继承.html" class="sidebar-link">图解 JavaScript 继承，一文搞定继承相关知识</a></li><li><a href="/advanced/3-高级api/基于js管理大文件上传以及断点续传.html" class="sidebar-link">基于js管理大文件上传以及断点续传</a></li><li><a href="/advanced/3-高级api/手写简易版的axios.html" class="sidebar-link">面试官不要再问我axios了？我能手写简易版的axios</a></li><li><a href="/advanced/3-高级api/页面生命周期.html" class="sidebar-link">页面生命周期：DOMContentLoaded，load，beforeunload，unload</a></li></ul></section></li><li><a href="/advanced/CORS完全手册之CORS详解.html" class="sidebar-link">CORS 完全手册之 CORS 详解</a></li><li><a href="/advanced/ES12新特性.html" class="sidebar-link">JavaScriptES12新特性抢先体验</a></li><li><a href="/advanced/前端模块化.html" class="sidebar-link">彻底掌握前端模块化</a></li><li><a href="/advanced/变量和类型-1.html" class="sidebar-link">变量和类型</a></li><li><a href="/advanced/变量和类型-2.html" class="sidebar-link">变量和类型-2</a></li><li><a href="/advanced/深入分析 JavaScript 模块循环引用.html" class="sidebar-link">深入分析 JavaScript 模块循环引用</a></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="axios-是如何封装-http-请求的"><a href="#axios-是如何封装-http-请求的" class="header-anchor">#</a> axios 是如何封装 HTTP 请求的</h2> <blockquote><p><a href="https://mp.weixin.qq.com/s/Wbcjp3Lh44nrInFc3IX85w" target="_blank" rel="noopener noreferrer">https://mp.weixin.qq.com/s/Wbcjp3Lh44nrInFc3IX85w<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p></blockquote> <p>Axios 毋庸多说大家在前端开发中常用的一个发送 HTTP 请求的库，用过的都知道。本文用来整理项目中常用的 Axios 的封装使用。同时学习源码，手写实现 Axios 的核心代码。</p> <h3 id="axios-常用封装"><a href="#axios-常用封装" class="header-anchor">#</a> Axios 常用封装</h3> <h4 id="是什么"><a href="#是什么" class="header-anchor">#</a> 是什么</h4> <p>Axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中。它的特性：</p> <ul><li>从浏览器中创建 <code>XMLHttpRequests</code></li> <li>从 node.js 创建 <code>http</code> 请求</li> <li>支持 <code>Promise</code> API</li> <li>拦截请求和响应</li> <li>转换请求数据和响应数据</li> <li>取消请求</li> <li>自动转换 JSON 数据</li> <li>客户端支持防御 XSRF官网地址：http://www.axios-js.com/zh-cn/docs/#axios-config</li></ul> <p>Axios 使用方式有两种：一种是直接使用全局的 Axios 对象；另外一种是通过 <code>axios.create(config)</code> 方法创建一个实例对象，使用该对象。两种方式的区别是通过第二种方式创建的实例对象更清爽一些；全局的 Axios 对象其实也是创建的实例对象导出的，它本身上加载了很多默认属性。后面源码学习的时候会再详细说明。</p> <h4 id="请求"><a href="#请求" class="header-anchor">#</a> 请求</h4> <p>Axios 这个 HTTP 的库比较灵活，给用户多种发送请求的方式，以至于有些混乱。细心整理会发现，全局的 Axios（或者 <code>axios.create(config)</code>创建的对象） 既可以当作对象使用，也可以当作函数使用：</p> <div class="language- extra-class"><pre class="language-text"><code>// axios 当作对象使用
+axios.request(config)
+axios.get(url[, config])
+axios.post(url[, data[, config]])
+// axios() 当作函数使用。 发送 POST 请求
+axios({
+  method: 'post',
+  url: '/user/12345',
+  data: {
+    firstName: 'Fred',
+    lastName: 'Flintstone'
+  }
+});
+</code></pre></div><p>后面源码学习的时候会再详细说明为什么 Axios 可以实现两种方式的使用。</p> <h4 id="取消请求"><a href="#取消请求" class="header-anchor">#</a> 取消请求</h4> <p>可以使用 <code>CancelToken.source</code> 工厂方法创建 cancel token：</p> <div class="language- extra-class"><pre class="language-text"><code>const CancelToken = axios.CancelToken;
+const source = CancelToken.source();
+
+axios.get('/user/12345', {
+  cancelToken: source.token
+}).catch(function(thrown) {
+  if (axios.isCancel(thrown)) {
+    console.log('Request canceled', thrown.message);
+  } else {
+     // 处理错误
+  }
+});
+
+// 取消请求（message 参数是可选的）
+source.cancel('Operation canceled by the user.');
+</code></pre></div><p>source 有两个属性：一个是 <code>source.token</code> 标识请求；另一个是 <code>source.cancel()</code> 方法，该方法调用后，可以让 CancelToken 实例的 promise 状态变为 <code>resolved</code>，从而触发 xhr 对象的 abort() 方法，取消请求。</p> <h4 id="拦截"><a href="#拦截" class="header-anchor">#</a> 拦截</h4> <p>Axios 还有一个奇妙的功能点，可以在发送请求前对请求进行拦截，对相应结果进行拦截。结合业务场景的话，在中台系统中完成登录后，获取到后端返回的 token，可以将 token 添加到 header 中，以后所有的请求自然都会加上这个自定义 header。</p> <div class="language- extra-class"><pre class="language-text"><code>//拦截1 请求拦截
+instance.interceptors.request.use(function(config){
+    //在发送请求之前做些什么
+    const token = sessionStorage.getItem('token');
+    if(token){
+        const newConfig = {
+            ...config,
+            headers: {
+                token: token
+            }
+        }
+        return newConfig;
+    }else{
+        return config;
+    }
+}, function(error){
+    //对请求错误做些什么
+    return Promise.reject(error);
+});
+</code></pre></div><p>我们还可以利用请求拦截功能实现 <strong>取消重复请求</strong>，也就是在前一个请求还没有返回之前，用户重新发送了请求，需要先取消前一次请求，再发送新的请求。比如搜索框自动查询，当用户修改了内容重新发送请求的时候需要取消前一次请求，避免请求和响应混乱。再比如表单提交按钮，用户多次点击提交按钮，那么我们就需要取消掉之前的请求，保证只有一次请求的发送和响应。</p> <p>实现原理是使用一个对象记录已经发出去的请求，在请求拦截函数中先判断这个对象中是否记录了本次请求信息，如果已经存在，则取消之前的请求，将本次请求添加进去对象中；如果没有记录过本次请求，则将本次请求信息添加进对象中。最后请求完成后，在响应拦截函数中执行删除本次请求信息的逻辑。</p> <div class="language- extra-class"><pre class="language-text"><code>// 拦截2   重复请求，取消前一个请求
+const promiseArr = {};
+instance.interceptors.request.use(function(config){
+    console.log(Object.keys(promiseArr).length)
+    //在发送请求之前做些什么
+    let source=null;
+    if(config.cancelToken){
+        // config 配置中带了 source 信息
+        source = config.source;
+    }else{
+        const CancelToken = axios.CancelToken;
+        source = CancelToken.source();
+        config.cancelToken = source.token;
+    }
+    const currentKey = getRequestSymbol(config);
+    if(promiseArr[currentKey]){
+        const tmp = promiseArr[currentKey];
+        tmp.cancel(&quot;取消前一个请求&quot;);
+        delete promiseArr[currentKey];
+        promiseArr[currentKey] = source;
+    }else{
+        promiseArr[currentKey] = source;
+    }
+    return config;
+
+}, function(error){
+    //对请求错误做些什么
+    return Promise.reject(error);
+});
+// 根据 url、method、params 生成唯一标识，大家可以自定义自己的生成规则
+function getRequestSymbol(config){
+    const arr = [];
+    if(config.params){
+        const data = config.params;
+        for(let key of Object.keys(data)){
+            arr.push(key+&quot;&amp;&quot;+data[key]);
+        }
+        arr.sort();
+    }
+    return config.url+config.method+arr.join(&quot;&quot;);
+}
+
+instance.interceptors.response.use(function(response){
+    const currentKey = getRequestSymbol(response.config);
+    delete promiseArr[currentKey];
+    return response;
+}, function(error){
+    //对请求错误做些什么
+    return Promise.reject(error);
+});
+</code></pre></div><p>最后，我们可以在响应拦截函数中统一处理返回码的逻辑：</p> <div class="language- extra-class"><pre class="language-text"><code>// 响应拦截
+instance.interceptors.response.use(function(response){
+    // 401 没有登录跳转到登录页面
+    if(response.data.code===401){
+        window.location.href = &quot;http://127.0.0.1:8080/#/login&quot;;
+    }else if(response.data.code===403){
+        // 403 无权限跳转到无权限页面
+        window.location.href = &quot;http://127.0.0.1:8080/#/noAuth&quot;;
+    }
+    return response;
+}, function(error){
+    //对请求错误做些什么
+    return Promise.reject(error);
+})
+</code></pre></div><h4 id="文件下载"><a href="#文件下载" class="header-anchor">#</a> 文件下载</h4> <p>通常文件下载有两种方式：一种是通过文件在服务器上的对外地址直接下载；还有一种是通过接口将文件以二进制流的形式下载。</p> <p>第一种：<strong>同域名</strong> 下使用 <code>a</code> 标签下载：</p> <div class="language- extra-class"><pre class="language-text"><code>// httpServer.js
+const express = require(&quot;express&quot;);
+const path = require('path');
+const app = express();
+
+//静态文件地址
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, '../')));
+app.listen(8081, () =&gt; {
+  console.log(&quot;服务器启动成功！&quot;)
+});
+// index.html
+&lt;a href=&quot;test.txt&quot; download=&quot;test.txt&quot;&gt;下载&lt;/a&gt;
+</code></pre></div><p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="图片"></p> <p>第二种：二进制文件流的形式传递，我们直接访问该接口并不能下载文件，一定程度保证了数据的安全性。比较多的场景是：后端接收到查询参数，查询数据库然后通过插件动态生成 excel 文件，以文件流的方式让前端下载。</p> <p>这时候，我们可以将请求文件下载的逻辑进行封装。将二进制文件流存在 <code>Blob</code> 对象中，再将其转为 url 对象，最后通过 a 标签下载。</p> <div class="language- extra-class"><pre class="language-text"><code>//封装下载
+export function downLoadFetch(url, params = {}, config={}) {
+    //取消
+    const downSource = axios.CancelToken.source();
+    document.getElementById('downAnimate').style.display = 'block';
+    document.getElementById('cancelBtn').addEventListener('click', function(){
+        downSource.cancel(&quot;用户取消下载&quot;);
+        document.getElementById('downAnimate').style.display = 'none';
+    }, false);
+    //参数
+    config.params = params;
+    //超时时间
+    config.timeout = config.timeout ? config.timeout : defaultDownConfig.timeout;
+    //类型
+    config.responseType = defaultDownConfig.responseType;
+    //取消下载
+    config.cancelToken = downSource.token;
+    return instance.get(url, config).then(response=&gt;{
+        const content = response.data;
+        const url = window.URL.createObjectURL(new Blob([content]));
+        //创建 a 标签
+        const link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        //文件名  Content-Disposition: attachment; filename=download.txt
+        const filename = response.headers['content-disposition'].split(&quot;;&quot;)[1].split(&quot;=&quot;)[1];
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        return {
+            status: 200,
+            success: true
+        }
+    })
+}
+</code></pre></div><p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="图片"></p> <p>https://juejin.cn/post/6878912072780873742</p> <h3 id="手写-axios-核心代码"><a href="#手写-axios-核心代码" class="header-anchor">#</a> 手写 Axios 核心代码</h3> <p>写了这么多用法终于到正题了，手写 Axios 核心代码。Axios 这个库源码不难阅读，没有特别复杂的逻辑，大家可以放心阅读 😂 。</p> <p>源码入口是这样查找：在项目 <code>node_modules</code> 目录下，找到 <code>axios</code> 模块的 <code>package.json</code> 文件，其中 <code>&quot;main&quot;: &quot;index.js&quot;,</code> 就是文件入口。一步步我们可以看到源码是怎么串起来的。</p> <p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="图片"></p> <p>模仿上面的目录结构，我们创建自己的目录结构：</p> <div class="language- extra-class"><pre class="language-text"><code>axios-js
+│  index.html
+│  
+└─lib
+        adapter.js
+        Axios.js
+        axiosInstance.js
+        CancelToken.js
+        InterceptorManager.js
+</code></pre></div><h4 id="axios-是什么"><a href="#axios-是什么" class="header-anchor">#</a> Axios 是什么</h4> <p>上面有提到我们使用的全局 Axios 对象其实也是构造出来的 axios，既可以当对象使用调用 get、post 等方法，也可以直接当作函数使用。这是因为全局的 Axios 其实是函数对象 <code>instance</code> 。源码位置在 axios/lib/axios.js 中。具体代码如下：</p> <div class="language- extra-class"><pre class="language-text"><code>// axios/lib/axios.js
+//创建 axios 实例
+function createInstance(defaultConfig) {
+  var context = new Axios(defaultConfig);
+  //instance 对象是 bind 返回的函数
+  var instance = bind(Axios.prototype.request, context);
+  // Copy axios.prototype to instance
+  utils.extend(instance, Axios.prototype, context);
+  // Copy context to instance
+  utils.extend(instance, context);
+  return instance;
+}
+
+// 实例一个 axios
+var axios = createInstance(defaults);
+
+// 向这个实例添加 Axios 属性
+axios.Axios = Axios;
+
+// 向这个实例添加 create 方法
+axios.create = function create(instanceConfig) {
+  return createInstance(mergeConfig(axios.defaults, instanceConfig));
+};
+// 向这个实例添加 CancelToken 方法
+axios.CancelToken = require('./cancel/CancelToken');
+// 导出实例 axios
+module.exports.default = axios;
+</code></pre></div><p>根据上面的源码，我们可以简写一下自己实现 Axios.js 和 axiosInstance.js：</p> <div class="language- extra-class"><pre class="language-text"><code>// Axios.js
+//Axios 主体
+function Axios(config){
+}
+
+// 核心方法，发送请求
+Axios.prototype.request = function(config){
+}
+
+Axios.prototype.get = function(url, config={}){
+    return this.request({url: url, method: 'GET', ...config});
+}
+
+Axios.prototype.post = function(url, data, config={}){
+    return this.request({url: url, method: 'POST', data: data, ...config})
+}
+export default Axios;
+</code></pre></div><p>在 axiosInstance.js 文件中，实例化一个 Axios 得到 context，再将原型对象上的方法绑定到 instance 对象上，同时将 context 的属性添加到 instance 上。这样 instance 就成为了一个函数对象。既可以当作对象使用，也可以当作函数使用。</p> <div class="language- extra-class"><pre class="language-text"><code>// axiosInstance.js
+//创建实例
+function createInstance(config){
+    const context = new Axios(config);
+    var instance = Axios.prototype.request.bind(context);
+    //将 Axios.prototype 属性扩展到 instance 上
+    for(let k of Object.keys(Axios.prototype)){
+        instance[k] = Axios.prototype[k].bind(context);
+    }
+    //将 context 属性扩展到 instance 上
+    for(let k of Object.keys(context)){
+        instance[k] = context[k]
+    }
+    return instance;
+}
+
+const axios = createInstance({});
+axios.create = function(config){
+    return createInstance(config);
+}
+export default axios;
+</code></pre></div><p>也就是说 axios.js 中导出的 axios 对象并不是 <code>new Axios()</code> 方法返回的对象 context，而是 <code>Axios.prototype.request.bind(context)</code> 执行返回的 <code>instance</code>，通过遍历 <code>Axios.prototype</code> 并改变其 this 指向到 context；遍历 context 对象让 instance 对象具有 context 的所有属性。这样 instance 对象就无敌了，😎 既拥有了 <code>Axios.prototype</code> 上的所有方法，又具有了 context 的所有属性。</p> <h4 id="请求实现"><a href="#请求实现" class="header-anchor">#</a> 请求实现</h4> <p>我们知道 Axios 在浏览器中会创建 XMLHttpRequest 对象，在 node.js 环境中创建 http 发送请求。<code>Axios.prototype.request()</code> 是发送请求的核心方法，这个方法其实调用的是 <code>dispatchRequest</code> 方法，而 <code>dispatchRequest</code> 方法调用的是 <code>config.adapter || defaults.adapter</code> 也就是自定义的 adapter 或者默认的 <code>defaults.adapter</code>，默认<code>defaults.adapter</code> 调用的是 getDefaultAdapter 方法，源码：</p> <div class="language- extra-class"><pre class="language-text"><code>function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = require('./adapters/xhr');
+  } else if (typeof process !== 'undefined' &amp;&amp; Object.prototype.toString.call(process) === '[object process]') {
+    // For node use HTTP adapter
+    adapter = require('./adapters/http');
+  }
+  return adapter;
+}
+</code></pre></div><p>哈哈哈，getDefaultAdapter 方法最终根据当前的环境返回不同的实现方法，这里用到了 <strong>适配器模式</strong>。我们只用实现 xhr 发送请求即可：</p> <div class="language- extra-class"><pre class="language-text"><code>//适配器 adapter.js
+function getDefaultAdapter(){
+    var adapter;
+    if(typeof XMLHttpRequest !== 'undefined'){
+        //导入 XHR 对象请求
+        adapter = (config)=&gt;{
+            return xhrAdapter(config);
+        }
+    }
+    return adapter;
+}
+function xhrAdapter(config){
+    return new Promise((resolve, reject)=&gt;{
+        var xhr = new XMLHttpRequest();
+        xhr.open(config.method, config.url, true);
+        xhr.send();
+        xhr.onreadystatechange = ()=&gt;{
+            if(xhr.readyState===4){
+                if(xhr.status&gt;=200&amp;&amp;xhr.status&lt;300){
+                    resolve({
+                        data: {},
+                        status: xhr.status,
+                        statusText: xhr.statusText,
+                        xhr: xhr
+                    })
+                }else{
+                    reject({
+                        status: xhr.status
+                    })
+                }
+            }
+        };
+    })
+}
+export default getDefaultAdapter;
+</code></pre></div><p>这样就理顺了，getDefaultAdapter 方法每次执行会返回一个 Promise 对象，这样 Axios.prototype.request 方法可以得到执行 xhr 发送请求的 Promise 对象。</p> <p>给我们的 Axios.js 添加发送请求的方法：</p> <div class="language- extra-class"><pre class="language-text"><code>//Axios.js
+import getDefaultAdapter from './adapter.js';
+Axios.prototype.request = function(config){
+    const adapter = getDefaultAdapter(config);
+    var promise = Promise.resolve(config);
+    var chain = [adapter, undefined];
+    while(chain.length){
+        promise = promise.then(chain.shift(), chain.shift());
+    }
+    return promise;
+}
+</code></pre></div><h4 id="拦截器实现"><a href="#拦截器实现" class="header-anchor">#</a> 拦截器实现</h4> <p>拦截器的原理在于 <code>Axios.prototype.request</code> 方法中的 <code>chain</code> 数组，把请求拦截函数添加到 <code>chain</code> 数组前面，把响应拦截函数添加到数组后面。这样就可以实现发送前拦截和响应后拦截的效果。<img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="图片">创建 InterceptorManager.js</p> <div class="language- extra-class"><pre class="language-text"><code>//InterceptorManager.js 
+//拦截器
+function InterceptorManager(){
+    this.handlers = [];
+}
+InterceptorManager.prototype.use = function(fulfilled, rejected){
+    this.handlers.push({
+        fulfilled: fulfilled,
+        rejected: rejected
+    });
+    return this.handlers.length -1;
+}
+
+export default InterceptorManager;
+</code></pre></div><p>在 Axios.js 文件中，构造函数有 <code>interceptors</code>属性：</p> <div class="language- extra-class"><pre class="language-text"><code>//Axios.js
+function Axios(config){
+    this.interceptors = {
+        request: new InterceptorManager(),
+        response: new InterceptorManager()
+    }
+}
+</code></pre></div><p>这样我们在 Axios.prototype.request 方法中对拦截器添加处理：</p> <div class="language- extra-class"><pre class="language-text"><code>//Axios.js
+Axios.prototype.request = function(config){
+    const adapter = getDefaultAdapter(config);
+    var promise = Promise.resolve(config);
+    var chain = [adapter, undefined];
+    //请求拦截
+    this.interceptors.request.handlers.forEach(item=&gt;{
+        chain.unshift(item.rejected);
+        chain.unshift(item.fulfilled);
+        
+    });
+    //响应拦截
+    this.interceptors.response.handlers.forEach(item=&gt;{
+        chain.push(item.fulfilled);
+        chain.push(item.rejected)
+    });
+    console.dir(chain);
+    while(chain.length){
+        promise = promise.then(chain.shift(), chain.shift());
+    }
+    return promise;
+}
+</code></pre></div><p>所以拦截器的执行顺序是：<code>请求拦截2 -&gt; 请求拦截1 -&gt; 发送请求 -&gt; 响应拦截1 -&gt; 响应拦截2</code></p> <h4 id="取消请求-2"><a href="#取消请求-2" class="header-anchor">#</a> 取消请求</h4> <p>来到 Axios 最精彩的部分了，取消请求。我们知道 xhr 的 <code>xhr.abort();</code> 函数可以取消请求。那么什么时候执行这个取消请求的操作呢？得有一个信号告诉 xhr 对象什么时候执行取消操作。取消请求就是未来某个时候要做的事情，你能想到什么呢？对，就是 Promise。Promise 的 <code>then</code>方法只有 Promise 对象的状态变为 resolved 的时候才会执行。我们可以利用这个特点，在 Promise 对象的 then 方法中执行取消请求的操作。看代码：</p> <div class="language- extra-class"><pre class="language-text"><code>//CancelToken.js
+// 取消请求
+function CancelToken(executor){
+    if(typeof executor !== 'function'){
+        throw new TypeError('executor must be a function.')
+    }
+    var resolvePromise;
+    this.promise = new Promise((resolve)=&gt;{
+        resolvePromise = resolve;
+    });
+    executor(resolvePromise)
+}
+CancelToken.source = function(){
+    var cancel;
+    var token = new CancelToken((c)=&gt;{
+        cancel = c;
+    })
+    return {
+        token,
+        cancel
+    };
+}
+export default CancelToken;
+</code></pre></div><p>当我们执行 <code>const source = CancelToken.source()</code>的时候，source 对象有两个字段，一个是 token 对象，另一个是 cancel 函数。在 xhr 请求中：</p> <div class="language- extra-class"><pre class="language-text"><code>//适配器
+// adapter.js
+function xhrAdapter(config){
+    return new Promise((resolve, reject)=&gt;{
+        ...
+        //取消请求
+        if(config.cancelToken){
+            // 只有 resolved 的时候才会执行取消操作
+            config.cancelToken.promise.then(function onCanceled(cancel){
+                if(!xhr){
+                    return;
+                }
+                xhr.abort();
+                reject(&quot;请求已取消&quot;);
+                // clean up xhr
+                xhr = null;
+            })
+        }
+    })
+}
+</code></pre></div><p>CancelToken 的构造函数中需要传入一个函数，而这个函数的作用其实是为了将能控制内部 Promise 的 resolve 函数暴露出去，暴露给 source 的 cancel 函数。这样内部的 Promise 状态就可以通过 <code>source.cancel()</code> 方法来控制啦，秒啊~ 👍</p> <h3 id="node-后端接口"><a href="#node-后端接口" class="header-anchor">#</a> node 后端接口</h3> <p>node 后端简单的接口代码：</p> <div class="language- extra-class"><pre class="language-text"><code>const express = require(&quot;express&quot;);
+const bodyParser = require('body-parser');
+const app = express();
+const router = express.Router();
+//文件下载
+const fs = require(&quot;fs&quot;);
+// get 请求
+router.get(&quot;/getCount&quot;, (req, res)=&gt;{
+  setTimeout(()=&gt;{
+    res.json({
+      success: true,
+      code: 200,
+      data: 100
+    })
+  }, 1000)
+})
+
+
+// 二进制文件流
+router.get('/downFile', (req, res, next) =&gt; {
+  var name = 'download.txt';
+  var path = './' + name;
+  var size = fs.statSync(path).size;
+  var f = fs.createReadStream(path);
+  res.writeHead(200, {
+    'Content-Type': 'application/force-download',
+    'Content-Disposition': 'attachment; filename=' + name,
+    'Content-Length': size
+  });
+  f.pipe(res);
+})
+
+// 设置跨域访问
+app.all(&quot;*&quot;, function (request, response, next) {
+  // 设置跨域的域名，* 代表允许任意域名跨域；http://localhost:8080 表示前端请求的 Origin 地址
+  response.header(&quot;Access-Control-Allow-Origin&quot;, &quot;http://127.0.0.1:5500&quot;);
+  //设置请求头 header 可以加那些属性
+  response.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With');
+  //暴露给 axios https://blog.csdn.net/w345731923/article/details/114067074
+  response.header(&quot;Access-Control-Expose-Headers&quot;, &quot;Content-Disposition&quot;);
+  // 设置跨域可以携带 Cookie 信息
+  response.header('Access-Control-Allow-Credentials', &quot;true&quot;);
+  //设置请求头哪些方法是合法的
+  response.header(
+    &quot;Access-Control-Allow-Methods&quot;,
+    &quot;PUT,POST,GET,DELETE,OPTIONS&quot;
+  );
+  response.header(&quot;Content-Type&quot;, &quot;application/json;charset=utf-8&quot;);
+  next();
+});
+
+// 接口数据解析
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+  extended: false
+}))
+app.use('/api', router) // 路由注册
+
+app.listen(8081, () =&gt; {
+  console.log(&quot;服务器启动成功！&quot;)
+});
+</code></pre></div><h3 id="git-地址"><a href="#git-地址" class="header-anchor">#</a> git 地址</h3> <p>如果大家能够跟着源码敲一遍，相信一定会有很多收获。</p> <p>手写 Axios 核心代码 github 地址：https://github.com/YY88Xu/axios-js
+Axios 封装：https://github.com/YY88Xu/vue2-component</p> <p>- EOF -</p> <p>推荐阅读 点击标题可跳转</p> <p>1、<a href="http://mp.weixin.qq.com/s?__biz=MzAxODE2MjM1MA==&amp;mid=2651578212&amp;idx=2&amp;sn=3a4bdc17b0c1808f2b5649d84eff93a1&amp;chksm=802508a5b75281b366dca8441c3ab2dc63b93adcd139ec5bb002dc8b10fef80efa49d49d92c2&amp;scene=21#wechat_redirect" target="_blank" rel="noopener noreferrer">vue 中 Axios 的封装和 API 接口的管理<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p>2、<a href="http://mp.weixin.qq.com/s?__biz=MzAxODE2MjM1MA==&amp;mid=2651576212&amp;idx=2&amp;sn=b1c3fac9534f01f4d7c68f7b88800d5c&amp;chksm=80250055b75289430570c54ba104675cbc6e5cf15cd35154a63f1d89b9f7211fb2f88f232e0f&amp;scene=21#wechat_redirect" target="_blank" rel="noopener noreferrer">Axios 如何取消重复请求？<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p>3、<a href="http://mp.weixin.qq.com/s?__biz=MzAxODE2MjM1MA==&amp;mid=2651576184&amp;idx=2&amp;sn=58e01488d9c22b3de224e88df91ca93e&amp;chksm=802500b9b75289afb55f9a448c6e3d3767fa5d0fba526696dea07e0f9bf167a4cd32791f373d&amp;scene=21#wechat_redirect" target="_blank" rel="noopener noreferrer">经得住拷问的 HTTPS 原理解析<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">5/8/2024, 3:01:19 PM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/advanced/3-高级api/JSB 原理与实践.html" class="prev">
+        JSB 原理与实践
+      </a></span> <span class="next"><a href="/advanced/3-高级api/mutation-observer.html">
+        DOM 变动观察器（Mutation observer）
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"><!----><!----></div></div>
+    <script src="/assets/js/app.fb0fc32d.js" defer></script><script src="/assets/js/2.57da4f88.js" defer></script><script src="/assets/js/1.a76cc220.js" defer></script><script src="/assets/js/34.b1282d64.js" defer></script>
+  </body>
+</html>
